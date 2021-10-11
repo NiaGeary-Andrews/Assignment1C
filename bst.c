@@ -8,13 +8,14 @@ Author: Nia Geary-Andrews
 #include <assert.h>
 #include "bst.h"
 
-//type def of node, includes left and righ branches of node
+//type def of node, includes data, left and right branches
 struct _Node{
 	int data;
 	struct _Node* left;
 	struct _Node* right;
 };
 
+//
 Node* minValueNode(Node *node){
 	Node* current = node;
 	
@@ -24,6 +25,8 @@ Node* minValueNode(Node *node){
 	return current;
 }
 
+//----------------------------------------------------
+//COMPLETE AND TESTED
 Node* insertNode(Node *root, int value){
 	//Fist case if tree is empty so root ==NULL
 	if(root == NULL){
@@ -52,6 +55,7 @@ Node* insertNode(Node *root, int value){
 
 }
 
+//--------------------------------------------------------
 //this deletes a node
 //NOT FINISHED
 Node* deleteNode(Node *root, int value){
@@ -93,14 +97,9 @@ Node* deleteNode(Node *root, int value){
 	return root;
 }
 
-//void print(Node *N){
-	//if(N != NULL){
-		//printf("%d \n", N->data);
-	//}
-//}
-
-//in-order traversal of tree
-//In-order starts on left subtree, then root then right subtree
+//-----------------------------------------------------------------
+//COMPLETE AND TESTED
+//in-order traversal of tree,starts on left subtree, then root then right subtree
 void printSubtree(Node *N){
 	//makes sure the node isn't null
 	if(N != NULL){
@@ -113,8 +112,9 @@ void printSubtree(Node *N){
 	}
 }
 
-//THIS DOES NOT WORK,A LEAF IS A NODE WITH NO CHILDREN NODES
-//BIG DUMMY
+//-------------------------------------------------------
+//COMPLETE AND TESTED
+//Counts the number of leaves(nodes with no children)
 int countLeaves(Node *N){
 	//when the node does not exists in the tree
 	if(N == NULL){
@@ -130,6 +130,7 @@ int countLeaves(Node *N){
 	}
 }
 
+//-------------------------------------------------------------
 //deletes a subtree
 //NOT CONVINCED IT WORKS
 Node* deleteSubtree(Node *root, int value){
@@ -143,32 +144,26 @@ Node* deleteSubtree(Node *root, int value){
 	}
 }
 
-//finds depth, idk if works
+//------------------------------------------------------------
+//COMPLETE AND TESTED
+//Finds depth between the rood node and a given node
 int depth(Node* root, Node *N){
-	int found =0;
-	int edges=0;
-	//if N=R so depth is 0
-	if(root->data == N->data){
-		return 0;
+	int d = -1;
+	//if the root given is empty
+	if(root==NULL){
+		return -1;
 	}
-	//while it hasn't been found
-	else{
-		while(found==0){
-			edges +=1;
-			//if the roots value is less than the node you are looking for, branch right
-	 		if(root->data < N->data){
-				root = root->right;
-			}
-		//if the root value is more than the node you are looking for, branch left
-			else if(root->data > N->data){
-				root = root->left;
-			}
-			else{
-				found=1;
-			}
-		}
+	//first part checks if the node given is the same as the root
+	//second and third parts check if the node given is in the left or the right subtrees
+	//for each level it has to check, d is increased by 1
+	if((root->data == N->data) || (d = depth(root->left,N)) >=0 || 
+	(d = depth(root->right, N)) >=0){
+		return d + 1;
 	}
-	return edges;
+	//if the node given isn't in the tree it returns -1 as it hasn't been changed
+	return d;
+	
+
 }
 
 
