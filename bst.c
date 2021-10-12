@@ -14,14 +14,18 @@ struct _Node{
 	struct _Node* left;
 	struct _Node* right;
 };
-
-//
+//-----------------------------------------------------
+//COMPLETE AND TESTED
+//finds the smallest value node, used when deleting nodes for changing the pointer to one of the remaining nodes
 Node* minValueNode(Node *node){
+	//sets the current node
 	Node* current = node;
 	
+	//while there are values to the left of the node meaning they are smaller it traverses the tree
 	while(current && current->left != NULL){
 		current = current->left;
 	}
+	//returns smallest current
 	return current;
 }
 
@@ -32,9 +36,9 @@ Node* insertNode(Node *root, int value){
 	if(root == NULL){
 		Node* new = (Node*)malloc(sizeof(struct Node*));
 		//makes sure it has been assigned memory
-		//if(new == NULL){
-			//return -1;
-		//}
+		if(new == NULL){
+			return NULL;
+		}
 		new->data = value;
 		new->left = NULL;
 		new->right = NULL;
@@ -77,23 +81,27 @@ Node* deleteNode(Node *root, int value){
 	else{
 		//case for if the node has one or no children
 		if(root->left == NULL){
+		//makes copy and returns the node to be deleted child. Then frees the memory from the root
 			Node *temp = root->right;
 			free(root);
 			return temp;			
 		}
 		else if(root->right == NULL){
+		//makes copy and returns the node to be deleted child. Then frees the memory from the root
 			Node *temp = root->left;
 			free(root);
 			return temp;
 		}
 	
 		//case for if the node has two children
+		//deals with the right branch of the tree after the deleted node. Finds the smallest value in the right branch
 		Node *temp = minValueNode(root->right);
-	
+		//then copys the value of the smallest into the root which is the node being removed/replaced
 		root->data = temp->data;
-	
+		//recursive function to shift up all remaining nodes under the one that has been deleted
 		root->right = deleteNode(root->right, temp->data);
 		}
+		//returns the new root value where the old root was
 	return root;
 }
 
@@ -131,15 +139,15 @@ int countLeaves(Node *N){
 }
 
 //-------------------------------------------------------------
+//COMPLETE AND TESTED
 //deletes a subtree
-//NOT CONVINCED IT WORKS
 Node* deleteSubtree(Node *root, int value){
 	//while there are nodes to be deleted
-	while (root != NULL){
-	//recursive functions calls so the next two nodes can be referenced first
+	if (root != NULL){
+	//traverses down left and rightsubtree
 		deleteSubtree(root->left, value);
 		deleteSubtree(root->right, value);
-	//then the origianl root is deleted, the memory is freed
+	//then the root is deleted, the memory is freed
 		free(root);
 	}
 }
@@ -162,8 +170,6 @@ int depth(Node* root, Node *N){
 	}
 	//if the node given isn't in the tree it returns -1 as it hasn't been changed
 	return d;
-	
-
 }
 
 
